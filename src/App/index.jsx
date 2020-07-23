@@ -1,28 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { lorem } from 'faker';
-import styled from 'styled-components';
 
-import ListContainer from './components/ListContainer';
-import GeneratorInput from './components/GeneratorInput';
-import ItemsContext from './ItemsContext';
+import { loadItems, saveItems } from '../utils/itemStorage';
+import getRandomLorem from '../utils/getRandomLorem';
+import ItemsContext from '../contexts/ItemContext';
+import { Wrapper } from './styles';
 
-const Wrapper = styled.div`
-  max-width: 40rem;
-  margin: 0 auto;
-`;
-
-const getRandomLorem = () => {
-  const MIN = 1;
-  const MAX = 10;
-  const randomInt = Math.floor(Math.random() * (MAX - MIN + 1)) + MIN;
-
-  return lorem.sentences(randomInt);
-};
-
-const saveItems = (items) =>
-  localStorage.setItem('items', JSON.stringify(items));
-
-const loadItems = () => JSON.parse(localStorage.getItem('items'));
+import ListContainer from '../components/ListContainer';
+import GeneratorInput from '../components/GeneratorInput';
 
 function App() {
   const [items, setItems] = useState([]);
@@ -37,10 +21,9 @@ function App() {
       });
     }
 
-    return newItems;
+    // Append to `items`
+    setItems([...items, ...newItems]);
   };
-
-  const appendToItems = (num) => setItems([...items, ...generateNewItems(num)]);
 
   const removeFromItems = (idx) => {
     items.splice(idx, 1);
@@ -64,7 +47,7 @@ function App() {
   return (
     <Wrapper>
       <ItemsContext.Provider
-        value={{ items, appendToItems, removeFromItems, resetList }}
+        value={{ items, generateNewItems, removeFromItems, resetList }}
       >
         <GeneratorInput />
         <ListContainer />

@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
 
-import ItemsContext from '../ItemsContext';
-import { Form, Input, Button } from '../styles/GeneratorInput';
+import ItemsContext from '../../contexts/ItemContext';
+import { Form, Input, Button } from './styles';
 
 function GeneratorInput() {
-  const { appendToItems, resetList } = useContext(ItemsContext);
+  const { generateNewItems, resetList } = useContext(ItemsContext);
 
   const [num, setNum] = useState(null);
 
@@ -13,7 +13,7 @@ function GeneratorInput() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    appendToItems(num);
+    generateNewItems(num);
     setNum(null);
   };
 
