@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { lorem } from 'faker';
+import styled from 'styled-components';
 
 import ListContainer from './components/ListContainer';
 import GeneratorInput from './components/GeneratorInput';
 import ItemsContext from './ItemsContext';
+
+const Wrapper = styled.div`
+  max-width: 40rem;
+  margin: 0 auto;
+`;
 
 const getRandomLorem = () => {
   const MIN = 1;
@@ -56,14 +62,14 @@ function App() {
   useEffect(() => saveItems(items), [items]);
 
   return (
-    <div className="App">
+    <Wrapper>
       <ItemsContext.Provider
         value={{ items, appendToItems, removeFromItems, resetList }}
       >
         <GeneratorInput />
         <ListContainer />
       </ItemsContext.Provider>
-    </div>
+    </Wrapper>
   );
 }
 
