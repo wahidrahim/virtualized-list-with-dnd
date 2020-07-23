@@ -1,21 +1,18 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+
 import ItemsContext from '../../contexts/ItemContext';
 
-const ListWrapper = styled.div``;
-const ListItem = styled.div`
-  border: 1px solid black;
-`;
+import { Wrapper } from './styles';
 
 function ListContainer() {
   const { items } = useContext(ItemsContext);
 
   return (
-    <ListWrapper>
+    <Wrapper>
       {items.map((item, idx) => (
-        <ListItem key={idx}>{item.description}</ListItem>
+        <li key={idx}>{item.description}</li>
       ))}
-    </ListWrapper>
+    </Wrapper>
   );
 }
 

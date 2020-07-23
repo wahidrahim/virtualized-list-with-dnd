@@ -11,6 +11,11 @@ import GeneratorInput from '../components/GeneratorInput';
 function App() {
   const [items, setItems] = useState([]);
 
+  /**
+   * Generates new items with `num` of random lorem sentences and
+   * appends it to the end of `items`
+   * @param {number} num
+   */
   const generateNewItems = (num) => {
     const newItems = [];
 
@@ -25,11 +30,18 @@ function App() {
     setItems([...items, ...newItems]);
   };
 
+  /**
+   * Remove an item specified by index `idx`
+   * @param {number} idx
+   */
   const removeFromItems = (idx) => {
     items.splice(idx, 1);
     setItems([...items]);
   };
 
+  /**
+   * Clear `items` array
+   */
   const resetList = () => setItems([]);
 
   // Load saved items on mount
