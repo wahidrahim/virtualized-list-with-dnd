@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 
 import ItemsContext from '../../contexts/ItemContext';
 
+import ListItem from '../ListItem';
+
 import { Wrapper } from './styles';
 
 function ListContainer() {
@@ -10,7 +12,7 @@ function ListContainer() {
   return (
     <Wrapper>
       {items.map((item, idx) => (
-        <li key={idx}>{item.description}</li>
+        <ListItem item={item} index={idx} key={idx} />
       ))}
     </Wrapper>
   );
