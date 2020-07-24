@@ -29,7 +29,7 @@ function App() {
     }
 
     // Append to `items`
-    setItems([...items, ...newItems]);
+    setItems([...newItems.reverse(), ...items]);
   };
 
   /**

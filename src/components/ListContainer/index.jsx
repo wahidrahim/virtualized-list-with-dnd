@@ -33,8 +33,6 @@ function ListContainer() {
   const setInnerRef = (innerRef) => () =>
     innerRef(document.getElementById('list'));
 
-  useEffect(() => setScrollToIndex(items.length - 1), [items]);
-
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
