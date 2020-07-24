@@ -31,11 +31,20 @@ function App() {
   };
 
   /**
-   * Remove an item specified by index `idx`
-   * @param {number} idx
+   * Remove an item specified by index `index`
+   * @param {number} index
    */
-  const removeFromItems = (idx) => {
-    items.splice(idx, 1);
+  const removeFromItems = (index) => {
+    items.splice(index, 1);
+    setItems([...items]);
+  };
+
+  const swapItems = (index1, index2) => {
+    const temp = items[index1];
+
+    items[index1] = items[index2];
+    items[index2] = temp;
+
     setItems([...items]);
   };
 
@@ -59,7 +68,13 @@ function App() {
   return (
     <Wrapper>
       <ItemsContext.Provider
-        value={{ items, generateNewItems, removeFromItems, resetList }}
+        value={{
+          items,
+          generateNewItems,
+          removeFromItems,
+          swapItems,
+          resetList,
+        }}
       >
         <GeneratorInput />
         <ListContainer />

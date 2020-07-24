@@ -4,11 +4,12 @@ import ItemsContext from '../../contexts/ItemContext';
 
 import { Wrapper } from './styles';
 
-function ListItem({ item: { title, description }, index }) {
+const ListItem = React.forwardRef(({ item, index, ...props }, ref) => {
+  const { title, description } = item;
   const { removeFromItems } = useContext(ItemsContext);
 
   return (
-    <Wrapper>
+    <Wrapper ref={ref} {...props}>
       <span className="btn-delete" onClick={() => removeFromItems(index)}>
         &#x2573;
       </span>
@@ -16,6 +17,6 @@ function ListItem({ item: { title, description }, index }) {
       <p>{description}</p>
     </Wrapper>
   );
-}
+});
 
 export default ListItem;
