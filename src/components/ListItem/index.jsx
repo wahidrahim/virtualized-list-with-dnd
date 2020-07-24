@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 
 import ItemsContext from '../../contexts/ItemContext';
-
 import { Wrapper } from './styles';
 
 const ListItem = React.forwardRef(({ item, index, ...props }, ref) => {

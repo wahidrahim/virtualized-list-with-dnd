@@ -8,10 +8,10 @@ import getRenderClone from './getRenderClone';
 import { Wrapper } from './styles';
 
 function ListContainer() {
-  const { items, swapItems } = useContext(ItemsContext);
+  const { items, reorderItems } = useContext(ItemsContext);
 
   const onDragEnd = ({ source, destination }) =>
-    swapItems(source.index, destination.index);
+    reorderItems(source.index, destination.index);
 
   const cache = new CellMeasurerCache({
     fixedWidth: true,

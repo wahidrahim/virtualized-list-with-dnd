@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-import { loadItems, saveItems } from '../utils/itemStorage';
-import getRandomLorem from '../utils/getRandomLorem';
-import ItemsContext from '../contexts/ItemContext';
+import { loadItems, saveItems } from './itemStorage';
+import getRandomLorem from './getRandomLorem';
 import { Wrapper } from './styles';
 
+import ItemsContext from '../contexts/ItemContext';
 import ListContainer from '../components/ListContainer';
 import GeneratorInput from '../components/GeneratorInput';
 
@@ -39,13 +39,13 @@ function App() {
     setItems([...items]);
   };
 
-  const swapItems = (index1, index2) => {
-    const temp = items[index1];
+  const reorderItems = (start, end) => {
+    const result = [...items];
+    const [removed] = result.splice(start, 1);
 
-    items[index1] = items[index2];
-    items[index2] = temp;
+    result.splice(end, 0, removed);
 
-    setItems([...items]);
+    setItems(result);
   };
 
   /**
@@ -72,7 +72,7 @@ function App() {
           items,
           generateNewItems,
           removeFromItems,
-          swapItems,
+          reorderItems,
           resetList,
         }}
       >
