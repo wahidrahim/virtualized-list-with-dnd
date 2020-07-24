@@ -13,22 +13,55 @@ function ListContainer() {
 
   const cache = new CellMeasurerCache({
     fixedWidth: true,
-    minHeight: 50,
+    minHeight: 82,
   });
 
-  const rowRenderer = ({ index, key, parent, style }) => (
-    <CellMeasurer cache={cache} key={key} parent={parent} rowIndex={index}>
-      {({ measure, registerChild }) => (
-        <div ref={registerChild} style={style}>
-          <ListItem item={items[index]} index={index} />
-        </div>
-      )}
-    </CellMeasurer>
+  const renderClone = (provided, snapshot, rubric) => (
+    <ListItem
+      item={items[rubric.source.index]}
+      index={rubric.source.index}
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+      {...provided.dragHandleProps}
+    />
   );
+
+  const rowRenderer = ({ index, key, parent, style }) => {
+    const item = items[index];
+
+    return (
+      <Draggable key={item.title} draggableId={`${item.title}`} index={index}>
+        {(provided) => (
+          <CellMeasurer
+            cache={cache}
+            key={key}
+            parent={parent}
+            rowIndex={index}
+          >
+            {({ measure, registerChild }) => (
+              <div ref={registerChild} style={style}>
+                <ListItem
+                  item={item}
+                  index={index}
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                />
+              </div>
+            )}
+          </CellMeasurer>
+        )}
+      </Draggable>
+    );
+  };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="droppable">
+      <Droppable
+        droppableId="droppable"
+        mode="virtual"
+        renderClone={renderClone}
+      >
         {(provided) => (
           <Wrapper ref={provided.innerRef} {...provided.droppableProps}>
             <List
@@ -37,25 +70,8 @@ function ListContainer() {
               rowCount={items.length}
               rowHeight={cache.rowHeight}
               rowRenderer={rowRenderer}
+              overscanRowCount={10}
             />
-            {/* {items.map((item, index) => (
-              <Draggable
-                key={item.title}
-                draggableId={`${item.title}`}
-                index={index}
-              >
-                {(provided) => (
-                  <ListItem
-                    item={item}
-                    index={index}
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  />
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder} */}
           </Wrapper>
         )}
       </Droppable>
