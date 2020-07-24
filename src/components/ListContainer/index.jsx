@@ -22,16 +22,20 @@ function ListContainer() {
 
   const renderClone = getRenderClone(items);
 
+  const setInnerRef = (innerRef) => () =>
+    innerRef(document.getElementById('list'));
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable
-        droppableId="droppable"
-        mode="virtual"
-        renderClone={renderClone}
-      >
-        {(provided) => (
-          <Wrapper ref={provided.innerRef} {...provided.droppableProps}>
+      <Wrapper>
+        <Droppable
+          droppableId="droppable"
+          mode="virtual"
+          renderClone={renderClone}
+        >
+          {(provided) => (
             <List
+              id="list"
               width={400}
               height={600}
               rowCount={items.length}
@@ -39,10 +43,12 @@ function ListContainer() {
               rowRenderer={rowRenderer}
               overscanRowCount={10}
               style={{ padding: '0.8rem 0' }}
+              ref={setInnerRef(provided.innerRef)}
+              {...provided.droppableProps}
             />
-          </Wrapper>
-        )}
-      </Droppable>
+          )}
+        </Droppable>
+      </Wrapper>
     </DragDropContext>
   );
 }
