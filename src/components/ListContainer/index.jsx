@@ -22,6 +22,7 @@ function ListContainer() {
 
   const cache = new CellMeasurerCache({
     fixedWidth: true,
+    defaultHeight: 82,
     minHeight: 1,
   });
 
@@ -32,7 +33,7 @@ function ListContainer() {
   const setInnerRef = (innerRef) => () =>
     innerRef(document.getElementById('list'));
 
-  useEffect(() => setScrollToIndex(items.length), [items]);
+  useEffect(() => setScrollToIndex(items.length - 1), [items]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import { loadItems, saveItems } from './itemStorage';
 import getRandomLorem from './getRandomLorem';
@@ -11,6 +11,8 @@ import GeneratorInput from '../components/GeneratorInput';
 function App() {
   const [items, setItems] = useState([]);
 
+  const maxItemsLength = useRef(0);
+
   /**
    * Generates new items with `num` of random lorem sentences and
    * appends it to the end of `items`
@@ -19,9 +21,9 @@ function App() {
   const generateNewItems = (num) => {
     const newItems = [];
 
-    for (let i = items.length + 1; i <= num + items.length; i++) {
+    for (let i = 0; i < num; i++) {
       newItems.push({
-        title: i,
+        title: ++maxItemsLength.current,
         description: getRandomLorem(),
       });
     }
@@ -51,7 +53,10 @@ function App() {
   /**
    * Clear `items` array
    */
-  const resetList = () => setItems([]);
+  const resetList = () => {
+    maxItemsLength.current = 0;
+    setItems([]);
+  };
 
   // Load saved items on mount
   useEffect(() => {
