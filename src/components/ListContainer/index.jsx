@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { List, CellMeasurerCache } from 'react-virtualized';
 
@@ -11,6 +11,8 @@ function ListContainer() {
   const { items, reorderItems } = useContext(ItemsContext);
 
   const [scrollToIndex, setScrollToIndex] = useState(items.length);
+
+  const prevItemsLength = useRef(0);
 
   const onDragEnd = (result) => {
     const { source, destination } = result;
@@ -33,7 +35,14 @@ function ListContainer() {
   const setInnerRef = (innerRef) => () =>
     innerRef(document.getElementById('list'));
 
-  useEffect(() => setScrollToIndex(items.length - 1), [items]);
+  // Scroll to bottom when `items` length is increased
+  useEffect(() => {
+    if (items.length > prevItemsLength.current) {
+      setScrollToIndex(items.length - 1);
+    }
+
+    prevItemsLength.current = items.length;
+  }, [items]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
