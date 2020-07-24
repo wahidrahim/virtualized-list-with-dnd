@@ -6,6 +6,7 @@ import ItemsContext from '../../contexts/ItemContext';
 import getRowRenderer from './getRowRenderer';
 import getRenderClone from './getRenderClone';
 import { Wrapper } from './styles';
+import ScrollButton from '../ScrollButton';
 
 function ListContainer() {
   const { items, reorderItems } = useContext(ItemsContext);
@@ -39,14 +40,13 @@ function ListContainer() {
   useEffect(() => {
     if (items.length > prevItemsLength.current) {
       setScrollToIndex(items.length - 1);
+      prevItemsLength.current = items.length;
     }
-
-    prevItemsLength.current = items.length;
   }, [items]);
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Wrapper>
+    <Wrapper>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId="droppable"
           mode="virtual"
@@ -67,8 +67,9 @@ function ListContainer() {
             />
           )}
         </Droppable>
-      </Wrapper>
-    </DragDropContext>
+      </DragDropContext>
+      <ScrollButton />
+    </Wrapper>
   );
 }
 
