@@ -12,6 +12,7 @@ function ListContainer() {
   const { items, reorderItems } = useContext(ItemsContext);
 
   const [scrollToIndex, setScrollToIndex] = useState(items.length);
+  const [isScrollButtonVisible, setIsScrollButtonVisible] = useState(false);
 
   const prevItemsLength = useRef(0);
 
@@ -36,6 +37,16 @@ function ListContainer() {
   const setInnerRef = (innerRef) => () =>
     innerRef(document.getElementById('list'));
 
+  const toggleScrollButtonVisibility = ({
+    clientHeight,
+    scrollHeight,
+    scrollTop,
+  }) => {
+    setIsScrollButtonVisible(scrollHeight - scrollTop > clientHeight);
+  };
+
+  const scrollToBottom = () => setScrollToIndex(items.length - 1);
+
   // Scroll to bottom when `items` length is increased
   useEffect(() => {
     if (items.length > prevItemsLength.current) {
@@ -43,6 +54,13 @@ function ListContainer() {
       prevItemsLength.current = items.length;
     }
   }, [items]);
+
+  // Reset `scrollToIndex` when scrolled away from bottom
+  useEffect(() => {
+    if (isScrollButtonVisible) {
+      setScrollToIndex(undefined);
+    }
+  }, [isScrollButtonVisible]);
 
   return (
     <Wrapper>
@@ -62,13 +80,14 @@ function ListContainer() {
               rowRenderer={rowRenderer}
               overscanRowCount={10}
               scrollToIndex={scrollToIndex}
+              onScroll={toggleScrollButtonVisibility}
               ref={setInnerRef(provided.innerRef)}
               {...provided.droppableProps}
             />
           )}
         </Droppable>
       </DragDropContext>
-      <ScrollButton />
+      {isScrollButtonVisible && <ScrollButton onClick={scrollToBottom} />}
     </Wrapper>
   );
 }
