@@ -1,13 +1,15 @@
 import React, { useContext } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { List, CellMeasurer, CellMeasurerCache } from 'react-virtualized';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { List, CellMeasurerCache } from 'react-virtualized';
 
 import ItemsContext from '../../contexts/ItemContext';
-import ListItem from '../ListItem';
+import getRowRenderer from './getRowRenderer';
+import getRenderClone from './getRenderClone';
 import { Wrapper } from './styles';
 
 function ListContainer() {
   const { items, swapItems } = useContext(ItemsContext);
+
   const onDragEnd = ({ source, destination }) =>
     swapItems(source.index, destination.index);
 
@@ -16,44 +18,9 @@ function ListContainer() {
     minHeight: 82,
   });
 
-  const renderClone = (provided, snapshot, rubric) => (
-    <ListItem
-      item={items[rubric.source.index]}
-      index={rubric.source.index}
-      ref={provided.innerRef}
-      {...provided.draggableProps}
-      {...provided.dragHandleProps}
-    />
-  );
+  const rowRenderer = getRowRenderer(items, cache);
 
-  const rowRenderer = ({ index, key, parent, style }) => {
-    const item = items[index];
-
-    return (
-      <Draggable key={item.title} draggableId={`${item.title}`} index={index}>
-        {(provided) => (
-          <CellMeasurer
-            cache={cache}
-            key={key}
-            parent={parent}
-            rowIndex={index}
-          >
-            {({ measure, registerChild }) => (
-              <div ref={registerChild} style={style}>
-                <ListItem
-                  item={item}
-                  index={index}
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                />
-              </div>
-            )}
-          </CellMeasurer>
-        )}
-      </Draggable>
-    );
-  };
+  const renderClone = getRenderClone(items);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -71,6 +38,7 @@ function ListContainer() {
               rowHeight={cache.rowHeight}
               rowRenderer={rowRenderer}
               overscanRowCount={10}
+              style={{ padding: '0.8rem 0' }}
             />
           </Wrapper>
         )}
