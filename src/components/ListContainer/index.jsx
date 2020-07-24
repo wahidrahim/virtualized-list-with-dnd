@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { List, CellMeasurerCache } from 'react-virtualized';
 
@@ -10,12 +10,19 @@ import { Wrapper } from './styles';
 function ListContainer() {
   const { items, reorderItems } = useContext(ItemsContext);
 
-  const onDragEnd = ({ source, destination }) =>
-    reorderItems(source.index, destination.index);
+  const [scrollToIndex, setScrollToIndex] = useState(items.length);
+
+  const onDragEnd = (result) => {
+    const { source, destination } = result;
+
+    if (destination) {
+      reorderItems(source.index, destination.index);
+    }
+  };
 
   const cache = new CellMeasurerCache({
     fixedWidth: true,
-    minHeight: 82,
+    minHeight: 1,
   });
 
   const rowRenderer = getRowRenderer(items, cache);
@@ -24,6 +31,8 @@ function ListContainer() {
 
   const setInnerRef = (innerRef) => () =>
     innerRef(document.getElementById('list'));
+
+  useEffect(() => setScrollToIndex(items.length), [items]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -42,7 +51,7 @@ function ListContainer() {
               rowHeight={cache.rowHeight}
               rowRenderer={rowRenderer}
               overscanRowCount={10}
-              style={{ padding: '0.8rem 0' }}
+              scrollToIndex={scrollToIndex}
               ref={setInnerRef(provided.innerRef)}
               {...provided.droppableProps}
             />
