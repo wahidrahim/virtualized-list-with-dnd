@@ -64,7 +64,7 @@ function App() {
 
     if (savedItems) {
       setItems(savedItems);
-      maxItemsLength.current = savedItems.length;
+      maxItemsLength.current = savedItems[savedItems.length - 1].title;
     }
   }, []);
 
