@@ -1,7 +1,12 @@
 import styled from 'styled-components';
 
-export const Form = styled.form`
+export const Wrapper = styled.div`
+  display: flex;
   margin-bottom: 2rem;
+`;
+
+export const Form = styled.form`
+  display: inherit;
 `;
 
 export const Input = styled.input`

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 
 import ItemsContext from '../../contexts/ItemContext';
-import { Form, Input, Button } from './styles';
+import { Wrapper, Form, Input, Button } from './styles';
 
 function GeneratorInput() {
   const { generateNewItems, resetList } = useContext(ItemsContext);
@@ -18,19 +18,21 @@ function GeneratorInput() {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Input
-        type="number"
-        name="number-of-items-input"
-        id="number-of-items-input"
-        value={num || ''}
-        onChange={updateNumOfItems}
-        min={0}
-        placeholder="# of items"
-      />
-      <Button type="submit">Generate</Button>
+    <Wrapper>
+      <Form onSubmit={handleSubmit}>
+        <Input
+          type="number"
+          name="number-of-items-input"
+          id="number-of-items-input"
+          value={num || ''}
+          onChange={updateNumOfItems}
+          min={0}
+          placeholder="# of items"
+        />
+        <Button type="submit">Generate</Button>
+      </Form>
       <Button onClick={resetList}>Reset</Button>
-    </Form>
+    </Wrapper>
   );
 }
 
