@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { List, CellMeasurerCache } from 'react-virtualized';
 
@@ -34,8 +35,17 @@ function ListContainer() {
 
   const renderClone = getRenderClone(items);
 
-  const setInnerRef = (innerRef) => () =>
-    innerRef(document.getElementById('list'));
+  const setInnerRef = (innerRef) => (ref) => {
+    // react-virtualized does not provide a way to get the DOM node of <List />
+    // so using `ReactDOM.findDOMNode(ref)` becomes necessary
+    if (ref) {
+      const domRef = ReactDOM.findDOMNode(ref)
+
+      if (domRef instanceof HTMLElement) {
+        innerRef(domRef)
+      } 
+    }
+  }
 
   const toggleScrollButtonVisibility = ({
     clientHeight,
