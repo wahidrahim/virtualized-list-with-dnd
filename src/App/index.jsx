@@ -62,7 +62,7 @@ function App() {
   useEffect(() => {
     const savedItems = loadItems();
 
-    if (savedItems.length) {
+    if (savedItems?.length) {
       setItems(savedItems);
       maxItemsLength.current = savedItems[savedItems.length - 1].title;
     }
