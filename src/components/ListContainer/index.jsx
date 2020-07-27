@@ -13,9 +13,12 @@ function ListContainer() {
   const { items, reorderItems } = useContext(ItemsContext);
 
   const [scrollToIndex, setScrollToIndex] = useState(items.length);
+
   const [isScrollButtonVisible, setIsScrollButtonVisible] = useState(false);
 
   const prevItemsLength = useRef(0);
+
+  const listRef = useRef(null);
 
   const onDragEnd = (result) => {
     const { source, destination } = result;
@@ -46,6 +49,8 @@ function ListContainer() {
       if (domRef instanceof HTMLElement) {
         innerRef(domRef);
       }
+
+      listRef.current = ref;
     }
   };
 
@@ -59,12 +64,17 @@ function ListContainer() {
 
   const scrollToBottom = () => setScrollToIndex(items.length - 1);
 
-  // Scroll to bottom when `items` length is increased
+  // Scroll to bottom when `items` length is updated
   useEffect(() => {
-    if (items.length > prevItemsLength.current) {
+    const hasNewItem = items.length > prevItemsLength.current;
+
+    if (hasNewItem) {
       setScrollToIndex(items.length - 1);
-      prevItemsLength.current = items.length;
     }
+
+    cache.current.clearAll();
+    listRef.current.recomputeRowHeights();
+    prevItemsLength.current = items.length;
   }, [items]);
 
   // Reset `scrollToIndex` when scrolled away from bottom
@@ -84,7 +94,6 @@ function ListContainer() {
         >
           {(provided) => (
             <List
-              id="list"
               width={400}
               height={600}
               rowCount={items.length}
