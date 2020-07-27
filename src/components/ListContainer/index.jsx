@@ -73,7 +73,7 @@ function ListContainer() {
     }
 
     cache.current.clearAll();
-    listRef.current.recomputeRowHeights();
+    listRef.current.forceUpdateGrid();
     prevItemsLength.current = items.length;
   }, [items]);
 
