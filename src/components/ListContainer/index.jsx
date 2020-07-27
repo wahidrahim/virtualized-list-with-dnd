@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { List, CellMeasurerCache } from 'react-virtualized';
 
@@ -25,13 +25,15 @@ function ListContainer() {
     }
   };
 
-  const cache = new CellMeasurerCache({
-    fixedWidth: true,
-    defaultHeight: 82,
-    minHeight: 1,
-  });
+  const cache = useRef(
+    new CellMeasurerCache({
+      fixedWidth: true,
+      defaultHeight: 82,
+      minHeight: 1,
+    })
+  );
 
-  const rowRenderer = getRowRenderer(items, cache);
+  const rowRenderer = getRowRenderer(items, cache.current);
 
   const renderClone = getRenderClone(items);
 
@@ -39,13 +41,13 @@ function ListContainer() {
     // react-virtualized does not provide a way to get the DOM node of <List />
     // so using `ReactDOM.findDOMNode(ref)` becomes necessary
     if (ref) {
-      const domRef = ReactDOM.findDOMNode(ref)
+      const domRef = ReactDOM.findDOMNode(ref);
 
       if (domRef instanceof HTMLElement) {
-        innerRef(domRef)
-      } 
+        innerRef(domRef);
+      }
     }
-  }
+  };
 
   const toggleScrollButtonVisibility = ({
     clientHeight,
@@ -86,7 +88,7 @@ function ListContainer() {
               width={400}
               height={600}
               rowCount={items.length}
-              rowHeight={cache.rowHeight}
+              rowHeight={cache.current.rowHeight}
               rowRenderer={rowRenderer}
               overscanRowCount={10}
               scrollToIndex={scrollToIndex}
